@@ -176,9 +176,11 @@ cdef class ElementBlock(Block):
     cdef VTFAElementBlock* vtf(self):
         return <VTFAElementBlock*> self._vtf
 
-    def BindNodeBlock(self, NodeBlock blk):
+    def BindNodeBlock(self, NodeBlock blk, partid=None):
+        if partid is None:
+            partid = blk.GetBlockID()
         self.vtf().SetNodeBlockID(blk.GetBlockID())
-        self.vtf().SetPartID(blk.GetBlockID())
+        self.vtf().SetPartID(partid)
 
     def SetPartName(self, name):
         self.vtf().SetPartName(name.encode())
