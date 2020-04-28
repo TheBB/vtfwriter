@@ -29,3 +29,5 @@ IFEM-to-VT requires Python 3.  It is possible that, on your system,
 
 
 .. _GLView: https://ceetron.com/ceetron-glview-inova/
+.. _cython: https://cython.org/
+.. _numpy: https://numpy.org/
