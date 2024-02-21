@@ -6,6 +6,7 @@ requires-python = ">=3.9,<4.0"
 name = "vtfwriter-stubs"
 version = "1.0.0"
 description = "Type stubs for the Python interface to libVTFExpressAPI"
+readme = "README.md"
 license = {text = "GPL3-or-later"}
 dependencies = [
     "typing-extensions>=4.9.0",
