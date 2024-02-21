@@ -33,15 +33,15 @@ jobs:
           python -m pip install pdm
       - name: Build
         working-directory: ./vtfwriter-stubs
-        run: pdm build
+        run: make build-stubs
       - uses: actions/upload-artifact@v4
         with:
           name: sdist
-          path: ./vtfwriter-stubs/dist/*.tar.gz
+          path: ./dist/*.tar.gz
       - uses: actions/upload-artifact@v4
         with:
           name: wheel
-          path: ./vtfwriter-stubs/dist/*.whl
+          path: ./dist/*.whl
 
   deploy:
     name: Deploy

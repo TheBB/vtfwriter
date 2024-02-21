@@ -3,5 +3,6 @@
 /build
 /*.egg-info
 /dist
+/vtfwriter-stubs/dist
 __pycache__
 .pdm-python
