@@ -1,0 +1,67 @@
+[project]
+authors = [
+    {name = "Eivind Fonn", email = "eivind.fonn@sintef.no"},
+]
+requires-python = ">=3.9,<4.0"
+name = "vtfwriter"
+version = "1.0.0"
+description = "Python interface to libVTFExpressAPI"
+readme = "README.rst"
+license = {text = "GPL3-or-later"}
+dependencies = [
+    "typing-extensions>=4.9.0",
+    "numpy>=1.23",
+]
+
+[build-system]
+requires = ["pdm-backend", "setuptools>=66", "cython>=3", "numpy"]
+build-backend = "pdm.backend"
+
+[tool.bumpversion]
+allow_dirty = false
+current_version = "1.0.0"
+commit = false
+tag = false
+parse = """(?x)
+    (?P<major>[0-9]+)
+    \\.(?P<minor>[0-9]+)
+    \\.(?P<patch>[0-9]+)
+    (?:
+        (?P<pre_label>a|b|rc|stable)
+        (?P<pre_number>[0-9]+)?
+    )?
+"""
+serialize = [
+    "{major}.{minor}.{patch}{pre_label}{pre_number}",
+    "{major}.{minor}.{patch}",
+]
+message = "Bump version: {current_version} -> {new_version}"
+tag_message = "Bump version: {current_version} -> {new_version}"
+sign_tags = true
+
+[tool.bumpversion.parts.pre_label]
+optional_value = "stable"
+values = [
+    "a",
+    "b",
+    "rc",
+    "stable",
+]
+
+[tool.bumpversion.parts.pre_number]
+first_value = "1"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+
+[[tool.bumpversion.files]]
+filename = "vtfwriter-stubs/pyproject.toml"
+
+[tool.pdm.build]
+run-setuptools = true
+includes = ["vtfwriter/__init__.pyi", "vtfwriter/py.typed"]
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "bump-my-version>=0.17.4",
+]

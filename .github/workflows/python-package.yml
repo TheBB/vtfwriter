@@ -1,0 +1,76 @@
+name: Python package
+
+on:
+  push:
+    branches: [ master ]
+    tags: ['*']
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hmarr/debug-action@v3
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        working-directory: ./vtfwriter-stubs
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pdm
+      - name: Build
+        working-directory: ./vtfwriter-stubs
+        run: pdm build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: ./vtfwriter-stubs/dist/*.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel
+          path: ./vtfwriter-stubs/dist/*.whl
+
+  deploy:
+    name: Deploy
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: pypa/gh-action-pypi-publish@v1.4.1
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_pwd }}
+
+  test-deploy:
+    name: Test Deploy
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: pypa/gh-action-pypi-publish@v1.4.1
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_test_pwd }}
+          repository_url: https://test.pypi.org/legacy/
+          skip_existing: true

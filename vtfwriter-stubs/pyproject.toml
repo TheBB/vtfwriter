@@ -1,0 +1,19 @@
+[project]
+authors = [
+    {name = "Eivind Fonn", email = "eivind.fonn@sintef.no"},
+]
+requires-python = ">=3.9,<4.0"
+name = "vtfwriter-stubs"
+version = "1.0.0"
+description = "Type stubs for the Python interface to libVTFExpressAPI"
+license = {text = "GPL3-or-later"}
+dependencies = [
+    "typing-extensions>=4.9.0",
+]
+
+[tool.pdm.build]
+includes = ["vtfwriter-stubs/__init__.pyi"]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
